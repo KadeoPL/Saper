@@ -74,7 +74,7 @@ function createGameBoard(level){
 
 }
 
-function game() {
+function playGame() {
     boardCells.forEach((cell) => {
         cell.addEventListener('click', () => {
             generateMines();
