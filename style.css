@@ -50,3 +50,7 @@ body {
 .popup > * {
     margin: 10px 30px;
 }
+
+.mine {
+    background-color: darkmagenta !important;
+}

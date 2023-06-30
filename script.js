@@ -3,6 +3,7 @@ const popupButtons = document.querySelectorAll('.popup > button');
 const gameWindow = document.querySelector('.game-window');
 let numOfMines = 0;
 let boardCells = []
+let numOfCells = 0;
 
 function clickPopupButtons(event) {
     const selectedButton = event.target;
@@ -68,16 +69,27 @@ function createGameBoard(level){
       }
     
       boardCells = Array.from(document.querySelectorAll('.game-board > div'));
-      console.log(boardCells);
-
+      numOfCells = boardCells.length;
       game();
 
 }
 
-function game(){
-    boardCells.forEach(cell => {
-    cell.addEventListener('click', () => {
-        alert('Wciśnięto pole');
+function game() {
+    boardCells.forEach((cell) => {
+        cell.addEventListener('click', () => {
+            generateMines();
+            if(cell.classList.contains('mine')){
+                alert('Tutaj bomba!');
+            }
+        });
     });
-});
-};
+}
+
+
+function generateMines() {
+    while (numOfMines > 0) {
+        let index = Math.floor(Math.random() * numOfCells);
+        boardCells[index].classList.add('mine');
+        numOfMines--;
+    }
+}
