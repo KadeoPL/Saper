@@ -2,6 +2,7 @@ const popupWindow = document.querySelector('.popup');
 const popupButtons = document.querySelectorAll('.popup > button');
 const gameWindow = document.querySelector('.game-window');
 let numOfMines = 0;
+let boardCells = []
 
 function clickPopupButtons(event) {
     const selectedButton = event.target;
@@ -66,9 +67,17 @@ function createGameBoard(level){
             break;
       }
     
-      let boardCells = Array.from(document.querySelectorAll('.game-board > div'));
+      boardCells = Array.from(document.querySelectorAll('.game-board > div'));
       console.log(boardCells);
+
+      game();
 
 }
 
-//na jutro - dodac funkcje losujaca pola z minami, losowe dodawanie do tabeli miny z zakrasu tablica lenght
+function game(){
+    boardCells.forEach(cell => {
+    cell.addEventListener('click', () => {
+        alert('Wciśnięto pole');
+    });
+});
+};
