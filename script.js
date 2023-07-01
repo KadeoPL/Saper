@@ -70,7 +70,7 @@ function createGameBoard(level){
     
       boardCells = Array.from(document.querySelectorAll('.game-board > div'));
       numOfCells = boardCells.length;
-      game();
+      playGame();
 
 }
 
