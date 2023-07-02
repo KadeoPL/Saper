@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Jura:wght@300;500;700&display=swap');
+
 * {
     padding: 0;
     margin: 0;
@@ -9,32 +11,38 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    background-image: url(img/minesweeper_bggame.jpg);
+    background-position: center;
+    background-repeat: no-repeat; /* Do not repeat the image */
+    background-size: cover; /* Resize the background image to cover the entire container */
+    font-family: Jura;
   }
 
 .game-window {
-    height: 400px;
-    width: 400px;
-    background-color: red;
+    height: 500px;
+    width: 450px;
+    background-color: transparent;
     visibility: hidden;
 }
 
 .game-info-bar {
     width: 100%;
-    height: 10%;
+    height: 50px;
     background-color: aqua;
 }
 
 .game-board {
     display: grid;
-    height: 90%;
+    height: 450px;
     width: 100%;
     grid-template-columns: repeat(8, 1fr);
     grid-template-rows: repeat(8, 1fr);
-    gap: 1px;
+    gap: 0px;
 }
 
 .game-cells {
-    background-color: pink;
+    background-color: #00ffb310;
+    border: #00ffb4 1px solid;
 }
 
 .popup {
@@ -44,12 +52,57 @@ body {
     align-items: center;
     justify-content: center;
     height: 400px;
-    background-color: rgb(10, 243, 69);
 }
 
-.popup > * {
-    margin: 10px 30px;
+.popup h1 {
+    color:#00ffb4;
+    font-size: 56px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 5px;
 }
+
+.popup h3 {
+    color: white;
+    font-size: 28px;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-top: 30px;
+}
+
+.popup button {
+    position: relative; 
+    font-family: Jura;
+    font-size: 28px;
+    text-transform: uppercase;
+    background-color: transparent;
+    color: white;
+    border: none;
+    margin-top: 70px;
+    transition: all .3s ease-in-out;
+}
+
+.popup button::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 130px;
+    height: 1px;
+    background-color: #00ffb4;
+}
+
+.popup button:hover {
+    transform: scale(1.1);
+    font-weight: 800;
+}
+
+.popup button:hover::after {
+    display: block;
+}
+
 
 .mine {
     background-color: darkmagenta !important;
