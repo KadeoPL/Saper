@@ -13,28 +13,41 @@ body {
     height: 100vh;
     background-image: url(img/minesweeper_bggame.jpg);
     background-position: center;
-    background-repeat: no-repeat; /* Do not repeat the image */
-    background-size: cover; /* Resize the background image to cover the entire container */
+    background-repeat: no-repeat;
+    background-size: cover;
     font-family: Jura;
   }
 
 .game-window {
-    height: 500px;
-    width: 450px;
     background-color: transparent;
     visibility: hidden;
+    flex-direction: column;
 }
 
 .game-info-bar {
     width: 100%;
     height: 50px;
-    background-color: aqua;
+    background-color: transparent;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
 }
+
+.game-logo {
+    color:#00ffb4;
+    font-weight: 800;
+    font-size: 24px;
+    text-transform: uppercase;
+}
+
+.time-box, .mines-counter {
+    color: white;
+}
+
 
 .game-board {
     display: grid;
-    height: 450px;
-    width: 100%;
     grid-template-columns: repeat(8, 1fr);
     grid-template-rows: repeat(8, 1fr);
     gap: 0px;
@@ -98,11 +111,6 @@ body {
     transform: scale(1.1);
     font-weight: 800;
 }
-
-.popup button:hover::after {
-    display: block;
-}
-
 
 .mine {
     background-color: darkmagenta !important;

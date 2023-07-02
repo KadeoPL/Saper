@@ -42,8 +42,8 @@ function createGameBoard(level){
         case 'easy':
             for (let i=0; i < 64; i++) {
                 const gameBoardCell = document.createElement('div');
-                gameBoard.style.gridTemplateColumns = 'repeat(8, 1fr)';
-                gameBoard.style.gridTemplateRows = 'repeat(8, 1fr)';
+                gameBoard.style.gridTemplateColumns = 'repeat(8, 50px)';
+                gameBoard.style.gridTemplateRows = 'repeat(8, 50px)';
                 gameBoardCell.classList.add('game-cells');
                 gameBoard.appendChild(gameBoardCell);
             }
@@ -51,8 +51,8 @@ function createGameBoard(level){
         case 'medium':
             for (let i=0; i < 256; i++) {
                 const gameBoardCell = document.createElement('div');
-                gameBoard.style.gridTemplateColumns = 'repeat(16, 1fr)';
-                gameBoard.style.gridTemplateRows = 'repeat(16, 1fr)';
+                gameBoard.style.gridTemplateColumns = 'repeat(16, 40px)';
+                gameBoard.style.gridTemplateRows = 'repeat(16, 40px)';
                 gameBoardCell.classList.add('game-cells');
                 gameBoard.appendChild(gameBoardCell);
             }
@@ -60,8 +60,8 @@ function createGameBoard(level){
         case 'hard':
             for (let i=0; i < 480; i++) {
                 const gameBoardCell = document.createElement('div');
-                gameBoard.style.gridTemplateColumns = 'repeat(30, 1fr)';
-                gameBoard.style.gridTemplateRows = 'repeat(16, 1fr)';
+                gameBoard.style.gridTemplateColumns = 'repeat(30, 30px)';
+                gameBoard.style.gridTemplateRows = 'repeat(16, 30px)';
                 gameBoardCell.classList.add('game-cells');
                 gameBoard.appendChild(gameBoardCell);
             }
