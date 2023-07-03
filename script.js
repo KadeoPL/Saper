@@ -125,18 +125,49 @@ function createGameBoard(level) {
   }
   
 
-function playGame() {
+  function playGame() {
     boardCells.forEach((cell) => {
         cell.addEventListener('click', () => {
             generateMines();
-            if(cell.classList.contains('mine')){
-                alert('Tutaj bomba!');
-            } else {
-              cell.classList.add('empty');
-            }
+            cell.classList.contains('mine') ? alert('BOMBA') : cell.classList.add('empty');
+            const x = parseInt(cell.dataset.x);
+            const y = parseInt(cell.dataset.y);
+            checkAdjacentCellsForMine(x, y);
+            checkAdjacentCellsForEmpty(x, y);            
         });
     });
 }
+
+function checkAdjacentCellsForMine(x, y) {
+    for (let i = x - 1; i <= x + 1; i++) {
+        for (let j = y - 1; j <= y + 1; j++) {
+            if (i === x && j === y) continue; // Pominięcie aktualnie klikniętej komórki
+            const adjacentCell = getCellByCoordinates(i, j);
+            if (adjacentCell && adjacentCell.classList.contains('mine')) {
+                alert('Bomba w sąsiedniej komórce!');
+            }
+        }
+    }
+}
+
+function checkAdjacentCellsForEmpty(x, y) {
+    for (let i = x - 1; i <= x + 1; i++) {
+        for (let j = y - 1; j <= y + 1; j++) {
+            if (i === x && j === y) continue; // Pominięcie aktualnie klikniętej komórki
+            const adjacentCell = getCellByCoordinates(i, j);
+            if (adjacentCell && adjacentCell.classList.contains('empty')) {
+                alert('Sąsiednia komórka jest pusta!');
+            }
+        }
+    }
+}
+
+function getCellByCoordinates(x, y) {
+    return boardCells.find((cell) => {
+        return parseInt(cell.dataset.x) === x && parseInt(cell.dataset.y) === y;
+    });
+}
+
 
 
 function generateMines() {
