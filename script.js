@@ -36,11 +36,11 @@ popupButtons.forEach(button => {
   });
 
 
-function createGameBoard(level){
+/*function createGameBoard(level){
     const gameBoard = document.querySelector('.game-board');
     switch (level) {
         case 'easy':
-            for (let i=0; i < 64; i++) {
+            for (let x=0; x < 8; x++) {
                 const gameBoardCell = document.createElement('div');
                 gameBoard.style.gridTemplateColumns = 'repeat(8, 50px)';
                 gameBoard.style.gridTemplateRows = 'repeat(8, 50px)';
@@ -72,7 +72,58 @@ function createGameBoard(level){
       numOfCells = boardCells.length;
       playGame();
 
-}
+}*/
+
+function createGameBoard(level) {
+    const gameBoard = document.querySelector('.game-board');
+  
+    switch (level) {
+      case 'easy':
+        gameBoard.style.gridTemplateColumns = 'repeat(8, 50px)';
+        gameBoard.style.gridTemplateRows = 'repeat(8, 50px)';
+        for (let y = 0; y < 8; y++) {
+          for (let x = 0; x < 8; x++) {
+            const gameBoardCell = document.createElement('div');
+            gameBoardCell.classList.add('game-cells');
+            gameBoardCell.dataset.x = x;
+            gameBoardCell.dataset.y = y;
+            gameBoard.appendChild(gameBoardCell);
+          }
+        }
+        break;
+      case 'medium':
+        gameBoard.style.gridTemplateColumns = 'repeat(16, 40px)';
+        gameBoard.style.gridTemplateRows = 'repeat(16, 40px)';
+        for (let y = 0; y < 16; y++) {
+          for (let x = 0; x < 16; x++) {
+            const gameBoardCell = document.createElement('div');
+            gameBoardCell.classList.add('game-cells');
+            gameBoardCell.dataset.x = x;
+            gameBoardCell.dataset.y = y;
+            gameBoard.appendChild(gameBoardCell);
+          }
+        }
+        break;
+      case 'hard':
+        gameBoard.style.gridTemplateColumns = 'repeat(30, 30px)';
+        gameBoard.style.gridTemplateRows = 'repeat(16, 30px)';
+        for (let y = 0; y < 16; y++) {
+          for (let x = 0; x < 30; x++) {
+            const gameBoardCell = document.createElement('div');
+            gameBoardCell.classList.add('game-cells');
+            gameBoardCell.dataset.x = x;
+            gameBoardCell.dataset.y = y;
+            gameBoard.appendChild(gameBoardCell);
+          }
+        }
+        break;
+    }
+  
+    boardCells = Array.from(document.querySelectorAll('.game-board > div'));
+    numOfCells = boardCells.length;
+    playGame();
+  }
+  
 
 function playGame() {
     boardCells.forEach((cell) => {
@@ -80,6 +131,8 @@ function playGame() {
             generateMines();
             if(cell.classList.contains('mine')){
                 alert('Tutaj bomba!');
+            } else {
+              cell.classList.add('empty');
             }
         });
     });
@@ -87,7 +140,7 @@ function playGame() {
 
 
 function generateMines() {
-    while (numOfMines > 0) {
+    while (numOfMines >= 0) {
         let index = Math.floor(Math.random() * numOfCells);
         boardCells[index].classList.add('mine');
         numOfMines--;

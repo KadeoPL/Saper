@@ -115,3 +115,7 @@ body {
 .mine {
     background-color: darkmagenta !important;
 }
+
+.empty {
+    background-color: transparent !important;
+}
