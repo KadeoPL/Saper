@@ -135,12 +135,7 @@ function createGameBoard(level) {
             cell.dataset.value === 'mine' ? endGameLoss() : cell.classList.add('empty');
             const x = parseInt(cell.dataset.x);
             const y = parseInt(cell.dataset.y);
-            numOfAdjacentMines = 0;
-            checkAdjacentCellsForMine(x, y);
-            checkAdjacentCellsForEmpty(x, y);
-            if (numOfAdjacentMines > 0 && cell.dataset.value != 'mine') {
-                cell.innerText = numOfAdjacentMines.toString();
-            }           
+            checkAdjacentCells(x, y);      
         });
     });
 }
@@ -154,29 +149,26 @@ function endGameLoss(){
     alert('Bomba! Koniec gry!');
 }
 
-function checkAdjacentCellsForMine(x, y) {
+function checkAdjacentCells(x, y) {
+    let numOfAdjacentMines = 0;
+  
     for (let i = x - 1; i <= x + 1; i++) {
-        for (let j = y - 1; j <= y + 1; j++) {
-            if (i === x && j === y) continue;
-            const adjacentCell = getCellByCoordinates(i, j);
-            if (adjacentCell && adjacentCell.dataset.value === 'mine') {
-                numOfAdjacentMines++;
+      for (let j = y - 1; j <= y + 1; j++) {
+        if (i === x && j === y) continue;
+        const adjacentCell = getCellByCoordinates(i, j);
+        if (adjacentCell && adjacentCell.dataset.value === 'mine') {
+          numOfAdjacentMines++;
+        } else if (adjacentCell && !adjacentCell.classList.contains('empty')) {
+            adjacentCell.classList.add('empty');
+            if(numOfAdjacentMines > 0 ){
+                adjacentCell.innerText = numOfAdjacentMines.toString();
+                numOfAdjacentMines = 0;
             }
+            checkAdjacentCells(i, j);
         }
+      }
     }
-}
-
-function checkAdjacentCellsForEmpty(x, y) {
-    for (let i = x - 1; i <= x + 1; i++) {
-        for (let j = y - 1; j <= y + 1; j++) {
-            if (i === x && j === y) continue;
-            const adjacentCell = getCellByCoordinates(i, j);
-            if (adjacentCell && adjacentCell.classList.contains('empty')) {
-
-            }
-        }
-    }
-}
+  }
 
 function getCellByCoordinates(x, y) {
     return boardCells.find((cell) => {
@@ -184,15 +176,6 @@ function getCellByCoordinates(x, y) {
     });
 }
 
-
-
-/*function generateMines() {
-    while (numOfMines >= 0) {
-        let index = Math.floor(Math.random() * numOfCells);
-        boardCells[index].classList.add('mine');
-        numOfMines--;
-    }
-}*/
 
 function generateMines() {
     while (numOfMines >= 0) {
