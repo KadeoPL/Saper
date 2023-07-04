@@ -1,9 +1,12 @@
 const popupWindow = document.querySelector('.popup');
 const popupButtons = document.querySelectorAll('.popup > button');
 const gameWindow = document.querySelector('.game-window');
+const minesShow = document.querySelector('.mine');
 let numOfMines = 0;
 let boardCells = []
 let numOfCells = 0;
+let numOfAdjacentMines = 0;
+let boardMines = [];
 
 function clickPopupButtons(event) {
     const selectedButton = event.target;
@@ -129,22 +132,35 @@ function createGameBoard(level) {
     boardCells.forEach((cell) => {
         cell.addEventListener('click', () => {
             generateMines();
-            cell.classList.contains('mine') ? alert('BOMBA') : cell.classList.add('empty');
+            cell.dataset.value === 'mine' ? endGameLoss() : cell.classList.add('empty');
             const x = parseInt(cell.dataset.x);
             const y = parseInt(cell.dataset.y);
+            numOfAdjacentMines = 0;
             checkAdjacentCellsForMine(x, y);
-            checkAdjacentCellsForEmpty(x, y);            
+            checkAdjacentCellsForEmpty(x, y);
+            if (numOfAdjacentMines > 0 && cell.dataset.value != 'mine') {
+                cell.innerText = numOfAdjacentMines.toString();
+            }           
         });
     });
+}
+
+function endGameLoss(){
+    
+    boardMines.forEach ((index) => {
+        index.classList.add('mine');
+    })
+    
+    alert('Bomba! Koniec gry!');
 }
 
 function checkAdjacentCellsForMine(x, y) {
     for (let i = x - 1; i <= x + 1; i++) {
         for (let j = y - 1; j <= y + 1; j++) {
-            if (i === x && j === y) continue; // Pominięcie aktualnie klikniętej komórki
+            if (i === x && j === y) continue;
             const adjacentCell = getCellByCoordinates(i, j);
-            if (adjacentCell && adjacentCell.classList.contains('mine')) {
-                alert('Bomba w sąsiedniej komórce!');
+            if (adjacentCell && adjacentCell.dataset.value === 'mine') {
+                numOfAdjacentMines++;
             }
         }
     }
@@ -153,10 +169,10 @@ function checkAdjacentCellsForMine(x, y) {
 function checkAdjacentCellsForEmpty(x, y) {
     for (let i = x - 1; i <= x + 1; i++) {
         for (let j = y - 1; j <= y + 1; j++) {
-            if (i === x && j === y) continue; // Pominięcie aktualnie klikniętej komórki
+            if (i === x && j === y) continue;
             const adjacentCell = getCellByCoordinates(i, j);
             if (adjacentCell && adjacentCell.classList.contains('empty')) {
-                alert('Sąsiednia komórka jest pusta!');
+
             }
         }
     }
@@ -170,10 +186,19 @@ function getCellByCoordinates(x, y) {
 
 
 
-function generateMines() {
+/*function generateMines() {
     while (numOfMines >= 0) {
         let index = Math.floor(Math.random() * numOfCells);
         boardCells[index].classList.add('mine');
+        numOfMines--;
+    }
+}*/
+
+function generateMines() {
+    while (numOfMines >= 0) {
+        let index = Math.floor(Math.random() * numOfCells);
+        boardCells[index].dataset.value = 'mine';
+        boardMines.push(boardCells[index]);
         numOfMines--;
     }
 }

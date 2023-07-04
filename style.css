@@ -54,8 +54,14 @@ body {
 }
 
 .game-cells {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: #00ffb310;
     border: #00ffb4 1px solid;
+    color: white;
+    font-size: 20px;
+    font-weight: 800;
 }
 
 .popup {
@@ -112,10 +118,10 @@ body {
     font-weight: 800;
 }
 
-.mine {
-    background-color: darkmagenta !important;
+.game-board .mine {
+    background-color: darkmagenta;
 }
 
-.empty {
-    background-color: transparent !important;
+.game-board .empty{
+    background-color: transparent;
 }
