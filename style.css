@@ -118,11 +118,11 @@ body {
     font-weight: 800;
 }
 
-.game-board .mine {
+.mine {
     background-color: darkmagenta;
 }
 
-.game-board .empty{
+.checked {
     background-color: transparent;
 }
 
