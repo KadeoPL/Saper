@@ -88,16 +88,20 @@ function createGameBoard(level) {
 }
 
 function playGame() {
+  let clickOnce = false;
   boardCells.forEach((cell) => {
     cell.addEventListener('click', () => {
-      generateMines();
+      if (!clickOnce) {
+        generateMines();
+        clickOnce = true;
+      }
       if (cell.dataset.value === 'mine') {
         endGameLoss();
       } else {
         cell.classList.add('empty');
         const x = parseInt(cell.dataset.x);
         const y = parseInt(cell.dataset.y);
-        checkAdjacentCells(x, y);
+        checkCell(x, y);
       }
     });
   });
@@ -129,6 +133,7 @@ function checkAdjacentCells(x, y) {
     currentCell.classList.add('empty');
     if (numOfAdjacentMines > 0) {
       currentCell.innerText = numOfAdjacentMines.toString();
+      setAdjacentCellColor(currentCell, numOfAdjacentMines);
     }
   }
 
@@ -145,7 +150,6 @@ function checkAdjacentCells(x, y) {
   }
 }
 
-
 function getCellByCoordinates(x, y) {
   return boardCells.find((cell) => {
     return parseInt(cell.dataset.x) === x && parseInt(cell.dataset.y) === y;
@@ -160,5 +164,28 @@ function generateMines() {
       boardMines.push(boardCells[index]);
       numOfMines--;
     }
+  }
+}
+
+function setAdjacentCellColor(cell, numOfAdjacentMines) {
+  switch (numOfAdjacentMines) {
+    case 1:
+      cell.classList.add('blue');
+      break;
+    case 2:
+      cell.classList.add('green');
+      break;
+    case 3:
+      cell.classList.add('red');
+      break;
+    case 4:
+      cell.classList.add('orange');
+      break;
+    case 5:
+      cell.classList.add('aqua');
+      break;
+    case 6:
+      cell.classList.add('pink');
+      break;
   }
 }

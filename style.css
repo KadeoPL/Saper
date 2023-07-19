@@ -125,3 +125,27 @@ body {
 .game-board .empty{
     background-color: transparent;
 }
+
+.blue {
+    color: blue;
+}
+
+.green {
+    color: green;
+}
+
+.red {
+    color: red;
+}
+
+.orange {
+    color: orange;
+}
+
+.aqua {
+    color: aqua;
+}
+
+.pink {
+    color: pink;
+}
