@@ -126,7 +126,6 @@ function generateMines(numOfMines) {
   }
 }
 
-
 function clickCell(x, y) {
   if (boardCells[x][y].dataset.value === 'mine') {
     endGameLoss();
@@ -135,77 +134,56 @@ function clickCell(x, y) {
 
   if (gamesOver) return;
 
-  if (boardCells[x][y].classList.contains('checked') || boardCells[x][y].dataset.value === 'flag') return;
+  if (!(boardCells[x][y].classList.contains('checked')) && !(boardCells[x][y].classList.contains('flag'))) {
+    countMines(x, y);
+  }
+}
+
+function countMines(x, y) {
+  if (boardCells[x][y].classList.contains('checked') || boardCells[x][y].classList.contains('flag')) {
+    return;
+  }
+
+  boardCells[x][y].classList.add('checked');
+
   let numMines = 0;
   for (let offsetX = -1; offsetX <= 1; offsetX++) {
     for (let offsetY = -1; offsetY <= 1; offsetY++) {
-      if (offsetX === 0 && offsetY === 0) continue; 
-  
-      const neighborX = parseInt(x) + parseInt(offsetX);
-      const neighborY = parseInt(y) + parseInt(offsetY);
-      console.log("Sąsiad X:", neighborX, "Sąsiad Y:", neighborY);
-  
+      if (offsetX === 0 && offsetY === 0) continue;
+
+      const neighborX = parseInt(x) + offsetX;
+      const neighborY = parseInt(y) + offsetY;
+
       if (neighborX >= 0 && neighborX < width && neighborY >= 0 && neighborY < height) {
         if (boardCells[neighborX][neighborY].dataset.value === 'mine') {
-          console.log("Sąsiad X:", neighborX, "Sąsiad Y:", neighborY);
           numMines++;
         }
       }
     }
   }
+
   if (numMines > 0) {
     setAdjacentCellColor(boardCells[x][y], numMines);
     boardCells[x][y].innerHTML = numMines;
-  }
-  boardCells[x][y].classList.add('checked');
- 
-  /*if ((x-1 < 0 || x + 1 >= width) && (y-1 < 0 || y + 1 >= width)){
-    if (boardCells[x-1][y-1].dataset.value === 'mine'){
-      numOfMines++;
-    }
-    if (boardCells[x][y-1].dataset.value === 'mine'){
-      numOfMines++;
-    }
-    if (boardCells[x+1][y-1].dataset.value === 'mine'){
-      numOfMines++;
-    }
-    if (boardCells[x-1][y].dataset.value === 'mine'){
-      numOfMines++;
-    }
-    if (boardCells[x+1][y].dataset.value === 'mine'){
-      numOfMines++;
-    }
-    if (boardCells[x+1][y+1].dataset.value === 'mine'){
-      numOfMines++;
-    }
-    if (boardCells[x][y+1].dataset.value === 'mine'){
-      numOfMines++;
-    }
-    if (boardCells[x+1][y+1].dataset.value === 'mine'){
-      numOfMines++;
-    }
-    console.log(numOfMines);
-    
- }*/
+  } else {
 
-}
+    for (let offsetX = -1; offsetX <= 1; offsetX++) {
+      for (let offsetY = -1; offsetY <= 1; offsetY++) {
+        if (offsetX === 0 && offsetY === 0) continue;
 
-  /*let adjacentMines = 0;
-  for (let i = x - 1; i = x + 1; i++) {
-    for (let j = y - 1; j = y + 1; j++) {
-      if (i === x && j === y) continue;
-      if (boardCells[i][j].dataset.value === 'mine') {
-        adjacentMines++;
+        const neighborX = parseInt(x) + offsetX;
+        const neighborY = parseInt(y) + offsetY;
+
+        if (neighborX >= 0 && neighborX < width && neighborY >= 0 && neighborY < height) {
+          countMines(neighborX, neighborY);
+        }
       }
     }
   }
-  
-  /*boardCells[x][y].classList.add('empty');
-  if (adjacentMines > 0) {
-    setAdjacentCellColor(boardCells[x][y], adjacentMines);
-    boardCells[x][y].innerHTML = adjacentMines;
-  }
-  console.log(adjacentMines);*/
+
+  boardCells[x][y].dataset.numMines = numMines;
+}
+
 
 function setAdjacentCellColor(cell, numOfAdjacentMines) {
   switch (numOfAdjacentMines) {
@@ -240,65 +218,4 @@ function endGameLoss() {
   gamesOver = true;
   alert('Bomba! Koniec gry!');
 }
-
-
-/*function playGame() {
-  let clickOnce = false;
-  boardCells.forEach((cell) => {
-    cell.addEventListener('click', () => {
-      if (!clickOnce) {
-        clickOnce = true;
-      }
-      if (cell.dataset.value === 'mine') {
-        endGameLoss();
-      } else {
-        cell.classList.add('empty');
-        const x = parseInt(cell.dataset.x);
-        const y = parseInt(cell.dataset.y);
-      }
-    });
-  });
-}*/
-
-
-/*function checkAdjacentCells(x, y) {
-  let numOfAdjacentMines = 0;
-
-  for (let i = x - 1; i <= x + 1; i++) {
-    for (let j = y - 1; j <= y + 1; j++) {
-      if (i === x && j === y) continue;
-      const adjacentCell = getCellByCoordinates(i, j);
-      if (adjacentCell && adjacentCell.dataset.value === 'mine') {
-        numOfAdjacentMines++;
-      }
-    }
-  }
-
-  const currentCell = getCellByCoordinates(x, y);
-  if (currentCell && !currentCell.classList.contains('empty')) {
-    currentCell.classList.add('empty');
-    if (numOfAdjacentMines > 0) {
-      currentCell.innerText = numOfAdjacentMines.toString();
-      setAdjacentCellColor(currentCell, numOfAdjacentMines);
-    }
-  }
-
-  if (numOfAdjacentMines === 0) {
-    for (let i = x - 1; i <= x + 1; i++) {
-      for (let j = y - 1; j <= y + 1; j++) {
-        if (i === x && j === y) continue;
-        const adjacentCell = getCellByCoordinates(i, j);
-        if (adjacentCell && !adjacentCell.classList.contains('empty')) {
-          checkAdjacentCells(i, j);
-        }
-      }
-    }
-  }
-}*/
-
-/*function getCellByCoordinates(x, y) {
-  return boardCells.find((cell) => {
-    return parseInt(cell.dataset.x) === x && parseInt(cell.dataset.y) === y;
-  });
-}*/
 
