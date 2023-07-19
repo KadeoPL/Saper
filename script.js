@@ -8,7 +8,9 @@ let width = 0;
 let height = 0;
 let gamesOver = false;
 
-
+document.addEventListener('contextmenu', (event) => {
+  event.preventDefault();
+});
 
 function clickPopupButtons(event) {
   const selectedButton = event.target;
@@ -99,11 +101,26 @@ function createGameBoard(level) {
     
     generateMines(numOfMines);
 
-    boardCells.forEach((row) => {
+    /*boardCells.forEach((row) => {
       row.forEach((cell) => {
         cell.addEventListener('click', () => {
           console.log(cell.dataset.x, cell.dataset.y);
           clickCell((cell.dataset.x), (cell.dataset.y));
+        });
+      });
+    });*/
+
+    boardCells.forEach((row) => {
+      row.forEach((cell) => {
+        cell.addEventListener('mousedown', (event) => {
+          if(event.button === 0) {
+            console.log(cell.dataset.x, cell.dataset.y);
+            clickCell((cell.dataset.x), (cell.dataset.y));
+          } else if (event.button === 2) {
+            if (!(cell.dataset.value === 'mine') && !(cell.classList.contains('checked')))
+            cell.classList.toggle('flag');
+          }
+          
         });
       });
     });

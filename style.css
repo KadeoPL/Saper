@@ -149,3 +149,7 @@ body {
 .pink {
     color: pink;
 }
+
+.flag {
+    background-color: red;
+}
