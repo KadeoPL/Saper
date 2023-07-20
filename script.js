@@ -2,11 +2,16 @@ const popupWindow = document.querySelector('.popup');
 const popupButtons = document.querySelectorAll('.popup > button');
 const gameWindow = document.querySelector('.game-window');
 const minesShow = document.querySelector('.mine');
+const minesCounter = document.querySelector('.mines-counter');
+const timeBox = document.querySelector('.time-box');
+let startTime = Date.now();
 let numOfMines = 0;
 let boardCells = [];
 let width = 0;
 let height = 0;
 let gamesOver = false;
+let bombsArray = [];
+let flagArray = [];
 
 document.addEventListener('contextmenu', (event) => {
   event.preventDefault();
@@ -17,20 +22,17 @@ function clickPopupButtons(event) {
   const className = selectedButton.className;
 
   switch (className) {
-    case 'easy':
-      numOfMines = 10;
+    case 'easy':  
       createGameBoard('easy');
       gameWindow.style.visibility = 'visible';
       popupWindow.style.visibility = 'hidden';
       break;
     case 'medium':
-      numOfMines = 40;
       createGameBoard('medium');
       gameWindow.style.visibility = 'visible';
       popupWindow.style.visibility = 'hidden';
       break;
     case 'hard':
-      numOfMines = 99;  
       createGameBoard('hard');
       gameWindow.style.visibility = 'visible';
       popupWindow.style.visibility = 'hidden';
@@ -49,6 +51,7 @@ function createGameBoard(level) {
     case 'easy':
       width = 8;
       height = 8;
+      numOfMines = 10;
       gameBoard.style.gridTemplateColumns = 'repeat(8, 50px)';
       gameBoard.style.gridTemplateRows = 'repeat(8, 50px)';
       boardCells = new Array(width).fill(null).map(() => new Array(height).fill(null));
@@ -66,6 +69,7 @@ function createGameBoard(level) {
     case 'medium':
       width = 16;
       height = 16;
+      numOfMines = 40;
       gameBoard.style.gridTemplateColumns = 'repeat(16, 40px)';
       gameBoard.style.gridTemplateRows = 'repeat(16, 40px)';
       boardCells = new Array(width).fill(null).map(() => new Array(height).fill(null));
@@ -83,6 +87,7 @@ function createGameBoard(level) {
     case 'hard':
       width = 30;
       height = 16;
+      numOfMines = 99;  
       gameBoard.style.gridTemplateColumns = 'repeat(30, 30px)';
       gameBoard.style.gridTemplateRows = 'repeat(16, 30px)';
       boardCells = new Array(width).fill(null).map(() => new Array(height).fill(null));
@@ -100,15 +105,7 @@ function createGameBoard(level) {
     }
     
     generateMines(numOfMines);
-
-    /*boardCells.forEach((row) => {
-      row.forEach((cell) => {
-        cell.addEventListener('click', () => {
-          console.log(cell.dataset.x, cell.dataset.y);
-          clickCell((cell.dataset.x), (cell.dataset.y));
-        });
-      });
-    });*/
+    startTimer();
 
     boardCells.forEach((row) => {
       row.forEach((cell) => {
@@ -117,30 +114,33 @@ function createGameBoard(level) {
             console.log(cell.dataset.x, cell.dataset.y);
             clickCell((cell.dataset.x), (cell.dataset.y));
           } else if (event.button === 2) {
-            if (!(cell.dataset.value === 'mine') && !(cell.classList.contains('checked')))
-            cell.classList.toggle('flag');
+            clickFlag(cell);
           }
           
         });
       });
+      minesCounter.innerHTML = `Mines: ${numOfMines}`;
     });
-
-    console.log(boardCells);
+    
 }
 
-function generateMines(numOfMines) {
+function generateMines(numberOfMines) {
   const numberOfRows = boardCells.length;
   const numberOfColumns = boardCells[0].length;
 
-  while(numOfMines > 0) {
+  while(numberOfMines > 0) {
     let x = Math.floor(Math.random() * numberOfRows);
     let y = Math.floor(Math.random() * numberOfColumns);
     if (!boardCells[x][y].dataset.value) {
       boardCells[x][y].dataset.value = 'mine';
       boardCells[x][y].classList.add('mine');
-      numOfMines--;
+      numberOfMines--;
     }
+
+    
   }
+  bombsArray = Array.from(document.querySelectorAll('[data-value="mine"]'));
+  console.log(bombsArray);
 }
 
 function clickCell(x, y) {
@@ -156,6 +156,25 @@ function clickCell(x, y) {
   }
 }
 
+function clickFlag(cell){
+  if (numOfMines > 0) {
+    if (!(cell.classList.contains('checked'))){
+      if (!cell.classList.contains('flag')) {
+        cell.classList.add('flag');
+        numOfMines--;
+        minesCounter.innerHTML = `Mines: ${numOfMines}`;
+        flagArray.push(cell);
+        console.log(flagArray);
+      } else {
+        cell.classList.remove('flag');
+        numOfMines++;
+        minesCounter.innerHTML = `Mines: ${numOfMines}`;
+        flagArray = flagArray.filter(cell);
+        console.log(flagArray);
+      }
+  }
+}
+}
 function countMines(x, y) {
   if (boardCells[x][y].classList.contains('checked') || boardCells[x][y].classList.contains('flag')) {
     return;
@@ -201,7 +220,6 @@ function countMines(x, y) {
   boardCells[x][y].dataset.numMines = numMines;
 }
 
-
 function setAdjacentCellColor(cell, numOfAdjacentMines) {
   switch (numOfAdjacentMines) {
     case 1:
@@ -234,5 +252,29 @@ function setAdjacentCellColor(cell, numOfAdjacentMines) {
 function endGameLoss() {
   gamesOver = true;
   alert('Bomba! Koniec gry!');
+  stopTimer();
 }
 
+function countTime() {
+  let currentTime = Date.now();
+  let elapsedTime = Math.floor((currentTime - startTime) / 1000);
+  let minutes = Math.floor(elapsedTime / 60);
+  let seconds = elapsedTime % 60;
+
+  
+  let formattedTime = `${padZero(minutes)}:${padZero(seconds)}`;
+
+  timeBox.innerHTML = 'Time: ' + formattedTime;
+}
+
+function padZero(value) {
+  return value.toString().padStart(2, '0');
+}
+
+function startTimer() {
+  intervalId = setInterval(countTime, 1000);
+}
+
+function stopTimer() {
+  clearInterval(intervalId);
+}
