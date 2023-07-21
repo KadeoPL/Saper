@@ -113,6 +113,7 @@ function createGameBoard(level) {
           if(event.button === 0) {
             if (clickFirst) {
               generateMines(numOfMines);
+              startTime = Date.now();
               startTimer();
               clickFirst = false;
             }
@@ -120,6 +121,7 @@ function createGameBoard(level) {
           } else if (event.button === 2) {
             if (clickFirst) {
               generateMines(numOfMines);
+              startTime = Date.now();
               startTimer();
               clickFirst = false;
             }
@@ -134,6 +136,7 @@ function createGameBoard(level) {
         });
       });
       minesCounter.innerHTML = `Mines: ${numOfMines}`;
+      timeBox.innerHTML = 'Time: 00:00';
     });
     
 }
@@ -167,6 +170,8 @@ function clickCell(x, y) {
 }
 
 function clickFlag(cell){
+  
+  if (gamesOver) return;
   if (numOfMines >= 0) {
     if (!(cell.classList.contains('checked'))){
       if (!cell.classList.contains('flag')) {
