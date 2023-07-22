@@ -1,5 +1,7 @@
-const popupWindow = document.querySelector('.popup');
-const popupButtons = document.querySelectorAll('.popup > button');
+const popupStartWindow = document.getElementById('popup-game-start');
+const popupEndWindow = document.getElementById('popup-game-end');
+const popupButtons = document.querySelectorAll('.level-buttons > button');
+const restartButton = document.getElementById('restart-button');
 const gameWindow = document.querySelector('.game-window');
 const minesShow = document.querySelector('.mine');
 const minesCounter = document.querySelector('.mines-counter');
@@ -24,19 +26,25 @@ function clickPopupButtons(event) {
 
   switch (className) {
     case 'easy':  
-      createGameBoard('easy');
-      gameWindow.style.visibility = 'visible';
-      popupWindow.style.visibility = 'hidden';
+    popupStartWindow.style.visibility = 'hidden';
+      setTimeout(function() {
+        gameWindow.style.visibility = 'visible';
+        createGameBoard('easy');
+      }, 500);
       break;
     case 'medium':
-      createGameBoard('medium');
-      gameWindow.style.visibility = 'visible';
-      popupWindow.style.visibility = 'hidden';
+      popupStartWindow.style.visibility = 'hidden';
+      setTimeout(function() {
+        gameWindow.style.visibility = 'visible';
+        createGameBoard('medium');
+      }, 500);
       break;
     case 'hard':
-      createGameBoard('hard');
-      gameWindow.style.visibility = 'visible';
-      popupWindow.style.visibility = 'hidden';
+      popupStartWindow.style.visibility = 'hidden';
+      setTimeout(function() {
+        gameWindow.style.visibility = 'visible';
+        createGameBoard('hard');
+      }, 500);
       break;
   }
 }
@@ -116,6 +124,7 @@ function createGameBoard(level) {
               startTime = Date.now();
               startTimer();
               clickFirst = false;
+              console.log(bombsArray);
             }
             clickCell((cell.dataset.x), (cell.dataset.y));
           } else if (event.button === 2) {
@@ -148,7 +157,7 @@ function generateMines(numberOfMines) {
   while(numberOfMines > 0) {
     let x = Math.floor(Math.random() * numberOfRows);
     let y = Math.floor(Math.random() * numberOfColumns);
-    if (!boardCells[x][y].dataset.value) {
+    if (!boardCells[x][y].dataset.value && !boardCells[x][y].classList.contains('checked')) {
       boardCells[x][y].dataset.value = 'mine';
       numberOfMines--;
     }
@@ -243,28 +252,28 @@ function countMines(x, y) {
 function setAdjacentCellColor(cell, numOfAdjacentMines) {
   switch (numOfAdjacentMines) {
     case 1:
-      cell.classList.add('blue');
+      cell.classList.add('one');
       break;
     case 2:
-      cell.classList.add('green');
+      cell.classList.add('two');
       break;
     case 3:
-      cell.classList.add('red');
+      cell.classList.add('three');
       break;
     case 4:
-      cell.classList.add('orange');
+      cell.classList.add('four');
       break;
     case 5:
-      cell.classList.add('aqua');
+      cell.classList.add('five');
       break;
     case 6:
-      cell.classList.add('pink');
+      cell.classList.add('six');
       break;
     case 7:
-      cell.classList.add('pink');
+      cell.classList.add('seven');
       break;
     case 8:
-      cell.classList.add('pink');
+      cell.classList.add('eight');
       break;
   }
 }
@@ -274,13 +283,24 @@ function endGameLoss() {
   for (i = 0; i < bombsArray.length; i++){
     bombsArray[i].classList.add('mine');
   };
-  alert('Bomba! Koniec gry!');
+  popupEndWindow.style.visibility = "visible";
+  const text = document.querySelector('.popup-text');
+  text.innerHTML = "You loss! <br> Try again!";
+  restartButton.addEventListener('click', reload);
   stopTimer();
 }
 
+function reload(){
+  setTimeout(function() {
+    location.reload();
+  }, 500);
+}
 function endGameWin(){
   gamesOver = true;
-  alert('Wygrałeś!');
+  popupEndWindow.style.visibility = "visible";
+  const text = document.querySelector('.popup-text');
+  text.innerHTML = "You won! <br> Good job";
+  restartButton.addEventListener('click', reload);
   stopTimer();
   return;
 }

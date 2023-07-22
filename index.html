@@ -10,19 +10,25 @@
     <div class="game-window">
         <div class="game-info-bar">
             <div class="time-box"></div>
-            <div class="game-logo">Minesweeper</div>
+            <div class="game-logo"><img src="img/logo-game.png" alt=""></div>
             <div class="mines-counter"></div>
         </div>
         <div class="game-board">
         </div>
     </div>
 
-    <div class="popup">
-        <h1>Minesweeper</h1>
-        <h3>Choose a level</h3>
-        <button class="easy">Easy</button>
-        <button class="medium">Medium</button>
-        <button class="hard">Hard</button>
+    <div id="popup-game-start" class="popup">
+        <!--  <h1>Minesweeper</h1>
+        <h3>Choose a level</h3>-->
+        <div class="level-buttons">
+            <button class="easy">Easy</button>
+            <button class="medium">Medium</button>
+            <button class="hard">Hard</button>
+        </div>    
+    </div>
+    <div id="popup-game-end" class="popup">
+        <div class="popup-text"></div>
+        <button id="restart-button">Restart</button>
     </div>
     <script src="script.js"></script>
 </body>
